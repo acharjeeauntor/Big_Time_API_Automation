@@ -1,0 +1,455 @@
+{
+	"info": {
+		"_postman_id": "fe63d461-1f55-4c59-94a2-b61305eea1cf",
+		"name": "BigTimeAPIAutomation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24414195",
+		"_collection_link": "https://planetary-meadow-699494.postman.co/workspace/Assignments-SDET~5c289f8c-70df-4295-98d1-8f23cd325905/collection/24414195-fe63d461-1f55-4c59-94a2-b61305eea1cf?action=share&creator=24414195&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "/Session (Login-Based)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Json Response Parsing\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"//Setting Environment Variables\r",
+							"pm.environment.set(\"SessionToken\", jsonData.token);\r",
+							"pm.environment.set(\"FirmId\", jsonData.firm);\r",
+							"\r",
+							"\r",
+							"//Test Cases and execution starts from here\r",
+							"pm.test(\"Verify if Status code is 200\", ()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if Token exist\",()=>{\r",
+							"    var actualToken = jsonData.token;\r",
+							"    pm.expect(actualToken).not.empty;\r",
+							"    pm.expect(actualToken).exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if UserId exist\",()=>{\r",
+							"    var actualUserid = jsonData.userid;\r",
+							"    pm.expect(actualUserid).exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if FirstName exist\",()=>{\r",
+							"    var actualFname = jsonData.fname;\r",
+							"    pm.expect(actualFname).not.empty;\r",
+							"    pm.expect(actualFname).exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if SurName exist\",()=>{\r",
+							"    var actualSname= jsonData.sname;\r",
+							"    pm.expect(actualSname).not.empty;\r",
+							"    pm.expect(actualSname).exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if Firm ID exist\",()=>{\r",
+							"    var actualFirm= jsonData.firm;\r",
+							"    var expectedFirmId = pm.environment.get(\"FirmId\");\r",
+							"    pm.expect(actualFirm).eq(expectedFirmId);\r",
+							"});\r",
+							"\r",
+							"\r",
+							" \r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"UserId\":\"{{UserId}}\",\r\n    \"Pwd\":\"{{Pwd}}\",\r\n    \"firm\":\"{{FirmId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/api/v2/session",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"session"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/Firm (Token-Based)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Json Response Parsing\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"pm.test(\"Verify if status code is 200\",()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if Firm ID is Correct\",()=>{\r",
+							"    var actualFirm= jsonData.firm;\r",
+							"    var expectedFirmId = pm.environment.get(\"FirmId\");\r",
+							"   pm.expect(actualFirm).eq(expectedFirmId);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Auth-ApiToken",
+						"value": "{{ApiToken}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/api/v2/session/firm",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"session",
+						"firm"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/SettingsData",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Json Response Parsing\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"\r",
+							"//Test Case and Execution starts here.\r",
+							"pm.test(\"Verify if Status code is 200\", ()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body exists\", ()=> {\r",
+							"    pm.expect(pm.response.to.exist);\r",
+							"});\r",
+							"\r",
+							"var reportIds = [165719, 236352, 236522, 236505, 182324, 182428,234744,233548];\r",
+							"pm.environment.set('reportids',reportIds);\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let BeginDate = JSON.parse(pm.request.body.raw).DT_BEGIN;\r",
+							"pm.environment.set('BeginDate', BeginDate);\r",
+							"\r",
+							"let EndDate = JSON.parse(pm.request.body.raw).DT_END;\r",
+							"pm.environment.set('EndDate', EndDate);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Auth-ApiToken",
+						"value": "{{ApiToken}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Token",
+						"value": "{{SessionToken}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Realm",
+						"value": "{{FirmId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"DT_BEGIN\": \"2023-07-06\",\r\n        \"DT_END\": \"2023-07-08\",\r\n        \"PRJ_SID\": 0,\r\n        \"CLI_SID\": 0,\r\n        \"STAFF_SID\": 0,\r\n        \"OTHER_SID\": 0,\r\n        \"PARAM1\": false,\r\n        \"PARAM2\": false,\r\n        \"PARAM3\": false,\r\n        \"PARAM4\": false,\r\n        \"ShowOnlyMyProjects\": false,\r\n        \"ShowOnlyMyStaff\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/api/v2/Report/Data/{{id}}",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"Report",
+						"Data",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/Detail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Json Response Parsing\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"\r",
+							"//Test Case and Execution starts here.\r",
+							"pm.test(\"Verify if Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if Begin Date is correct\", () => {\r",
+							"    var actualBgDate = jsonData.Settings.DT_BEGIN;\r",
+							"    var expectedBgDate = pm.environment.get(\"BeginDate\");\r",
+							"    pm.expect(actualBgDate).eq(expectedBgDate);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if End Date is correct\", () => {\r",
+							"    var actualEndDate= jsonData.Settings.DT_END;\r",
+							"    var expectedEndDate = pm.environment.get(\"EndDate\");\r",
+							"    pm.expect(actualEndDate).eq(expectedEndDate);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Auth-ApiToken",
+						"value": "{{ApiToken}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Token",
+						"value": "{{SessionToken}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Realm",
+						"value": "{{FirmId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":{{id}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/api/v2/report/detail",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"report",
+						"detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/Data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Json Response Parsing\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"//Test Case and Execution starts here.\r",
+							"pm.test(\"Verify if Status code is 200\", ()=> {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body exists\", ()=> {\r",
+							"    pm.expect(pm.response.to.exist);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var ReportIds = pm.environment.get(\"reportids\");",
+							"pm.environment.set('id', ReportIds[0]);",
+							"if (Array.isArray(ReportIds) && ReportIds.length > 1) {",
+							"  pm.environment.set(\"reportids\", ReportIds.slice(1));",
+							"  postman.setNextRequest('/Data'); ",
+							"} else {",
+							"  postman.setNextRequest(null);",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Auth-ApiToken",
+						"value": "{{ApiToken}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Token",
+						"value": "{{SessionToken}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Realm",
+						"value": "{{FirmId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":{{id}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/api/v2/report/data",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"report",
+						"data"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "UserId",
+			"value": "dmckinney@magnals.com",
+			"type": "string"
+		},
+		{
+			"key": "Pwd",
+			"value": "Bigtime#2023",
+			"type": "string"
+		},
+		{
+			"key": "Firm",
+			"value": "Izvj-Ihd-yqqj",
+			"type": "string"
+		}
+	]
+}

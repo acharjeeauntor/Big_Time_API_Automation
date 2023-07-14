@@ -1,0 +1,16 @@
+{
+  "name": "newman",
+  "version": "1.0.0",
+  "description": "Big Time API Automation",
+  "main": "index.js",
+  "scripts": {
+    "test": "node report.js"
+  },
+  "keywords": [],
+  "author": "NA",
+  "license": "ISC",
+  "dependencies": {
+    "newman": "^5.3.2",
+    "newman-reporter-htmlextra": "^1.22.7"
+  }
+}
